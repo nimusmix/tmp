@@ -4,26 +4,47 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+  {% block title %}
+  {% endblock title %}
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap');
+
+    body {
+        font-family: 'Nanum Myeongjo', serif;
+        background-color: black;
+        color: white;
+    }
+  </style>
+  <style type="text/css">
+      a:link { color: #ffffff;}	
+      a:visited { color: #ffffff;}
+      a:hover { color: gray;}
+  </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container mt-3">
     {% if request.user.is_authenticated %}
-      <h3>{{ user }}</h3>
-      <form action="{% url 'accounts:logout' %}" method="POST">
-        {% csrf_token %}
-        <input type="submit" value="Logout">
-      </form>
-      <form action="{% url 'accounts:delete' %}" method="POST">
-        {% csrf_token %}
-        <input type="submit" value="회원탈퇴">
-      </form>
-      <a href="{% url 'accounts:update' %}">회원정보수정</a>
+      <div class="d-flex justify-content-between my-2">
+        <div class="d-flex">
+          <b><a href="{% url 'accounts:profile' user.username %}">{{ user.first_name }}&nbsp;{{ user.last_name }}</a></b><p>님 반갑습니다.</p>
+          
+        </div>
+        <div class="d-flex">
+          <form action="{% url 'accounts:logout' %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="Logout" style="border: none; background-color: black; color: white; text-decoration: underline;">
+          </form>
+
+        </div>
+      </div>
     {% else %}
-      <a href="{% url 'accounts:login' %}">Login</a>
-      <a href="{% url 'accounts:signup' %}">Signup</a>
+      <div class="d-flex justify-content-end my-2">
+        <a href="{% url 'accounts:login' %}">Login</a>
+        <p>&nbsp;</p>
+        <a href="{% url 'accounts:signup' %}">Signup</a>
+      </div>
     {% endif %}
-    <hr>
     {% block content %}
     {% endblock content %}
   </div>

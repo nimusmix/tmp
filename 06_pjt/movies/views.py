@@ -38,8 +38,12 @@ def create(request):
 @require_safe
 def detail(request, pk):
     movie = Movie.objects.get(pk=pk)
+    comments = movie.comment_set.all()
+    comment_form = CommentForm()
     context = {
         'movie': movie,
+        'comments': comments,
+        'comment_form': comment_form,
     }
     return render(request, 'movies/detail.html', context)
 
@@ -73,17 +77,18 @@ def delete(request, pk):
     return redirect('movie:detail', movie.pk)
 
 
-@login_required
 @require_POST
 def comments_create(request, pk):
-    movie = Movie.objects.get(pk=pk)
-    comment_form = CommentForm(request.POST)
-    if comment_form.is_valid():
-        comment = comment_form.save(commit=False)
-        comment.movie = movie
-        comment.user = request.user
-        comment.save()
-    return redirect('movies:detail', movie.pk)
+    if request.user.is_authenticated:
+        movie = Movie.objects.get(pk=pk)
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.movie = movie
+            comment.user = request.user
+            comment.save()
+        return redirect('movies:detail', movie.pk)
+    return redirect('accounts:login')
 
 
 @require_POST

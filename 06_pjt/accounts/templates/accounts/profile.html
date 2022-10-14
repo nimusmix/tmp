@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>{{ person.first_name }}&nbsp;{{ person.last_name }}</title>
+{% endblock title %}
+
+{% block content %}
+  <h1 class="d-flex justify-content-center">{{ person.first_name }}&nbsp;{{ person.last_name }}</h1>
+  {% if request.user == person %}
+  <div class="d-flex justify-content-center">
+    <a href="{% url 'movies:create' %}">Create</a>
+    <p>&nbsp;<a href="{% url 'accounts:update' %}">User Information Edit</a></p>
+    <form action="{% url 'accounts:delete' %}" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="Withdrawal" style="border: none; background-color: black; color: white; text-decoration: underline;">
+    </form>
+  </div>
+  {% endif %}
+
+  <hr>
+  <a href="{% url 'movies:index' %}">Back</a>
+{% endblock content %}

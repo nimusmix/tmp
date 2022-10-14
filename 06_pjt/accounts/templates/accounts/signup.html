@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 
+{% block title %}
+  <title>Signup</title>
+{% endblock title %}
+
 {% block content %}
-  <h1>SIGNUP</h1>
+  <h1 class="d-flex justify-content-center">Signup</h1>
+  <br>
   <form action="{% url 'accounts:signup' %}" method="POST">
     {% csrf_token %}
     {{ form.as_p }}

@@ -6,7 +6,6 @@ from django.db import models
 class Movie(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=20)
-    score = models.FloatField()
     description = models.TextField()
 
 class Comment(models.Model):

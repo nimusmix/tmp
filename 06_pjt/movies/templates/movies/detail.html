@@ -1,10 +1,15 @@
 {% extends 'base.html' %}
 
+{% block title %}
+  <title>{{ movie.title }}</title>
+{% endblock title %}
+
 {% block content %}
-  <h1>DETAIL</h1>
+  <h1 class="d-flex justify-content-center">{{ movie.title }}</h1>
   <hr>
   <p><b>작성자 : {{ movie.user }}</b></p>
   <p>제목 : {{ movie.title }}</p>
+  <p>내용 : {{ movie.description }}</p>
   {% if request.user == movie.user %}
     <a href="{% url 'movies:update' movie.pk %}">UPDATE</a>
     <form action="{% url 'movies:delete' movie.pk %}" method="POST">
@@ -13,11 +18,11 @@
     </form>
   {% endif %}
   <hr>
-  <a href="{% url 'movies:index' %}">뒤로가기</a>
+  <a href="{% url 'movies:index' %}">Back</a>
   <hr>
-  <h4>댓글 목록</h4>
+  <h4>Comments</h4>
   {% if comments %}
-    <p>{{ comments|length }}개의 댓글이 있습니다.</p>
+    <p>There are {{ comments|length }} comments.</p>
   {% endif %}
   <ul>
     {% for comment in comments %}
@@ -31,7 +36,7 @@
         {% endif %}
       </li>
     {% empty %}
-      <li>댓글이 없습니다.</li>
+      <li>No comments yet.</li>
     {% endfor %}
   </ul>
   <hr>
@@ -39,9 +44,9 @@
     <form action="{% url 'movies:comments_create' movie.pk %}" method="POST">
       {% csrf_token %}
       {{ comment_form }}
-      <input type="submit">
+      <input type="submit" value="Submit">
     </form>
   {% else %}
-    <a href="{% url 'accounts:login' %}">댓글을 작성하려면 로그인 하세요.</a>
+    <a href="{% url 'accounts:login' %}">Log in to write comment.</a>
   {% endif %}
 {% endblock content %}
