@@ -6,9 +6,9 @@
 
 {% block content %}
   <h1 class="d-flex justify-content-center">Movies</h1>
+  <br>
   {% for movie in movies %}
-    <p>제목 : {{ movie.title }}</p>
-    <a href="{% url 'movies:detail' movie.pk %}">상세 페이지</a>
+    <a href="{% url 'movies:detail' movie.pk %}" class="d-flex justify-content-center">{{ movie.title }}</a>
     <hr>
   {% endfor %}
 {% endblock content %}

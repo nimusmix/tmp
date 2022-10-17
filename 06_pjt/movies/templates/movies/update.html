@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 
 {% block title %}
-  <title>Update</title>
+  <title>{{ movie.title }}</title>
 {% endblock title %}
 
 {% block content %}
-  <h1 class="d-flex justify-content-center">Update</h1>
+  <h1 class="d-flex justify-content-center">{{ movie.title }}</h1>
   <form action="{% url 'movies:update' movie.pk %}" method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit">
+    <input type="reset" value="Reset">
+    <input type="submit" value="Submit">
   </form>
   <hr>
-  <a href="{% url 'movies:detail' movie.pk %}">뒤로가기</a>
+  <a href="{% url 'movies:detail' movie.pk %}">Back</a>
 {% endblock content %}

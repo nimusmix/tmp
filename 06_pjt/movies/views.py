@@ -74,7 +74,7 @@ def delete(request, pk):
         if request.user == movie.user:
             movie.delete()
             return redirect('movies:index')
-    return redirect('movie:detail', movie.pk)
+    return redirect('movies:detail', movie.pk)
 
 
 @require_POST
@@ -97,4 +97,4 @@ def comments_delete(request, movie_pk, comment_pk):
         comment = Comment.objects.get(pk=comment_pk)
         if request.user == comment.user:
             comment.delete()
-    return redirect('articles:detail', movie_pk)
+    return redirect('movies:detail', movie_pk)

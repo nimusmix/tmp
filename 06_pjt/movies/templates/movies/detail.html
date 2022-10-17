@@ -6,32 +6,33 @@
 
 {% block content %}
   <h1 class="d-flex justify-content-center">{{ movie.title }}</h1>
-  <hr>
-  <p><b>작성자 : {{ movie.user }}</b></p>
-  <p>제목 : {{ movie.title }}</p>
-  <p>내용 : {{ movie.description }}</p>
+  <div class="d-flex justify-content-end">
+    <p style="opacity: 0.8;">Written by</p>&nbsp;
+    <a href="{% url 'accounts:profile' movie.user.username %}" style="opacity: 0.8;">{{ user.first_name }}&nbsp;{{ user.last_name }}</a>
+  </div>
+  <p>{{ movie.description }}</p>
   {% if request.user == movie.user %}
-    <a href="{% url 'movies:update' movie.pk %}">UPDATE</a>
+    <div class="d-flex justify-content-end">
+    <a href="{% url 'movies:update' movie.pk %}" style="opacity: 0.8;">Update</a>
     <form action="{% url 'movies:delete' movie.pk %}" method="POST">
       {% csrf_token %}
-      <input type="submit" value="DELETE">
+      <input type="submit" value="Delete" style="border: none; background-color: black; color: white; text-decoration: underline; opacity: 0.8;">
     </form>
+    </div>
   {% endif %}
-  <hr>
-  <a href="{% url 'movies:index' %}">Back</a>
   <hr>
   <h4>Comments</h4>
   {% if comments %}
-    <p>There are {{ comments|length }} comments.</p>
+    <p style="opacity: 0.8;">There are {{ comments|length }} comments.</p>
   {% endif %}
   <ul>
     {% for comment in comments %}
-      <li>
-        {{ comment.user }} - {{ comment.content }}
+      <li class="d-flex justify-content-between">
+        {{ comment.user.first_name }}&nbsp;{{ comment.user.last_name}} : {{ comment.content }}
         {% if request.user == comment.user %}
           <form action="{% url 'movies:comments_delete' movie.pk comment.pk %}" method="POST">
             {% csrf_token %}
-            <input type="submit" value="DELETE">
+            <input type="submit" value="Delete" style="border: none; background-color: black; color: white; text-decoration: underline; opacity: 0.8;">
           </form>
         {% endif %}
       </li>
@@ -39,7 +40,6 @@
       <li>No comments yet.</li>
     {% endfor %}
   </ul>
-  <hr>
   {% if request.user.is_authenticated %}
     <form action="{% url 'movies:comments_create' movie.pk %}" method="POST">
       {% csrf_token %}
@@ -49,4 +49,6 @@
   {% else %}
     <a href="{% url 'accounts:login' %}">Log in to write comment.</a>
   {% endif %}
+  <hr>
+  <a href="{% url 'movies:index' %}" style="opacity: 0.8;">Back</a>
 {% endblock content %}
