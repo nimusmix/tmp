@@ -1,7 +1,3 @@
-
-<html>
-  <body>
-    
 # CHECK YOUR SITE
 
 10년 간의 홈페이지 변화를 확인할 수 있는 사이트
@@ -38,79 +34,34 @@ https://check-your-site.netlify.app/
 
 ### 🔖 추가 기능
 
-**사이트 별명 설정**
+**사이트 별명 설정**  [코드](구현 코드.md#사이트-별명-설정)
 
 - 별명을 사용하는 것이 URL을 사용하는 것보다 사용자가 한 눈에 어떤 사이트인지 알아보기 쉬울 것이라고 판단했습니다.
 - UI를 고려하여 최대 5자 까지의 별명을 설정할 수 있도록 했습니다.
 
-<details>
-  <summary>코드</summary>
-    ```typescript
-    // /components/organisms/MainPage/SearchBar/index.tsx
-      ...
-      <input
-        placeholder="별명을 입력하세요. (최대 5자)"
-        {...register("nickname", {
-          required: MESSAGE_SEARCH_ERROR.NICKNAME_REQUIRED,
-          maxLength: {
-            value: 5,
-            message: MESSAGE_SEARCH_ERROR.NICKNAME_LENGTH,
-          },
-        })}
-      />
-      ...
-    ```
-</details>
-
 <br/>
 
-**주소 파싱**
+**URL 파싱**  [코드](구현 코드.md#URL-파싱)
 
 - 관심 사이트 카드의 URL은 최대 2줄까지 노출됩니다.
 - 따라서 URL에서의 핵심적인 정보만 노출시키기 위해 URL의 프로토콜 이후부터 나타나도록 했습니다.
 
-<details>
-  <summary>코드</summary>
-    ```typescript
-    // /components/organisms/MainPage/SearchBar/index.tsx
-    ...
-    const onValid = ({ nickname, url }: FieldValues) => {
-      ...
+<br/>
 
-      const data: IWishlistItem = {
-        nickname,
-        url: urlParsing(url),
-      };
+**URL 중복 검사**  [코드](구현 코드.md#URL-중복-검사)
 
-      ...
-    };
-    ...
-
-    // /utils/urlParsing.ts
-    const urlParsing = (url: string) => {
-      let parsed_url = [];
-
-      if (url.startsWith("http")) {
-        parsed_url = url.split("://");
-        parsed_url[0] += "://";
-      } else {
-        parsed_url = ["", url];
-      }
-
-      if (url.endsWith("/")) {
-        parsed_url[1] = parsed_url[1].slice(0, -1);
-      }
-
-      return parsed_url;
-    };
-    ```
-</details>
+- 데이터가 10년 중 일부만 존재할 경우 가장 가까운 시점이 중복되어 같은 홈페이지가 계속 노출되는 문제가 있었습니다.
+- api가 반환하는 timestamp를 이용해 이미 저장된 날짜의 홈페이지라면 다시 저장되지 않도록 했습니다.
 
 <br/>
 
-**URL 목록 캐싱**
+**주소 중복 검사**
 
-- 
+**URL 목록 캐싱 ** [코드](구현 코드.md#URL-목록-캐싱)
+
+- 하나의 URL은 해가 넘어가기 전까지 동일한 데이터를 받아옵니다.
+- 따라서 계속해서 api 요청을 보내지 않도록 URL을 쿼리 키로 하여 데이터를 캐싱했습니다.
+- 다만 해가 바뀌는 시점에 사이트를 이용할 수 있는 점을 고려하여 60분 마다 다시 데이터를 받아오도록 했습니다.
 
 <br/>
 
@@ -129,9 +80,19 @@ npm start
 
 - `Recoil`, `React-Query`
 
-    : 
+    <details>
+      <summary>선정 이유</summary>
+      <div>
+    본 과제에서는 전역으로 2가지의 상태를 관리합니다. (토스트를 띄우기 위한 `toastState`, 관심 목록을 관리하기 위한 `wishlistState`)<br/>
+    따라서 많은 양의 보일러 플레이트 코드를 작성해야 하는 `redux`는 비효율적이라고 판단했습니다.<br/>
+    또한 `useContext`는 토스트를 띄울 경우 `setToast`를 사용하는 컴포넌트까지 렌더링이 발생하므로,<br/>
+    간편하게 상태를 관리할 수 있고, localStorage와의 연동이 쉬운 Recoil을 선정했습니다.
+      </div>
+    </details>
 
 - `React-hook-form`
+
+    `react-hook-form`
 
     : 
 
@@ -147,7 +108,3 @@ npm start
 
 과제를 수행하며 
 
-
-
-  </body>
-</html>
