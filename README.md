@@ -39,27 +39,11 @@ https://check-your-site.netlify.app/
 - 별명을 사용하는 것이 URL을 사용하는 것보다 사용자가 한 눈에 어떤 사이트인지 알아보기 쉬울 것이라고 판단했습니다.
 - UI를 고려하여 최대 5자 까지의 별명을 설정할 수 있도록 했습니다.
 
-```typescript
-// /components/organisms/MainPage/SearchBar/index.tsx
-...
-<input
-  placeholder="별명을 입력하세요. (최대 5자)"
-  {...register("nickname", {
-    required: MESSAGE_SEARCH_ERROR.NICKNAME_REQUIRED,
-    maxLength: {
-      value: 5,
-      message: MESSAGE_SEARCH_ERROR.NICKNAME_LENGTH,
-    },
-  })}
-/>
-...
-```
-
 <details>
   <summary>코드</summary>
   <div markdown='1'>
-    ```
-    // /components/organisms/MainPage/SearchBar/index.tsx
+    ``` typescript
+      // /components/organisms/MainPage/SearchBar/index.tsx
       ...
       <input
         placeholder="별명을 입력하세요. (최대 5자)"
